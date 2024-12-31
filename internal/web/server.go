@@ -42,7 +42,6 @@ func (we *Webserver) CreateServer() *chi.Mux {
 
 type TemplateData struct {
 	Title              string
-	BackgroundColor    string
 	ResponseTime       time.Duration
 	ExternalCallMethod string
 	ExternalCallURL    string

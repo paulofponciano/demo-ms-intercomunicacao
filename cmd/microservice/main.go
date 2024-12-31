@@ -24,10 +24,9 @@ func main() {
 	defer cancel()
 
 	templateData := &web.TemplateData{
-		Title:              viper.GetString("TITLE"),
-		BackgroundColor:    viper.GetString("BACKGROUND_COLOR"),
-		ResponseTime:       time.Duration(viper.GetInt("RESPONSE_TIME")),
-		ExternalCallURL:    viper.GetString("EXTERNAL_CALL_URL"),
+		Title:           viper.GetString("TITLE"),
+		ResponseTime:    time.Duration(viper.GetInt("RESPONSE_TIME")),
+		ExternalCallURL: viper.GetString("EXTERNAL_CALL_URL"),
 		ExternalCallMethod: viper.GetString("EXTERNAL_CALL_METHOD"),
 	}
 	server := web.NewServer(templateData)
