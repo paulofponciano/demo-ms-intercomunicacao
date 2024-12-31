@@ -13,6 +13,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
+//go:embed template/*
 var templateContent embed.FS
 
 type Webserver struct {
@@ -49,7 +50,7 @@ type TemplateData struct {
 }
 
 func (h *Webserver) HandleRequest(w http.ResponseWriter, r *http.Request) {
-	
+
 	time.Sleep(time.Millisecond * h.TemplateData.ResponseTime)
 
 	if h.TemplateData.ExternalCallURL != "" {
