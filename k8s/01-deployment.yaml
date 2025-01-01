@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservice-1
+  namespace: sample-api-python
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microservice-1
+  template:
+    metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-python: "o11y/python-auto-instrumentation"
+      labels:
+        app: microservice-1
+    spec:
+      containers:
+      - name: app
+        image: paulofponciano/demo-ms-intercomunicacao:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: TITLE
+          value: "Microservice 1"
+        - name: RESPONSE_TIME
+          value: "500"
+        - name: EXTERNAL_CALL_URL
+          value: "http://microservice-2.sample-api-python.svc.cluster.local:5000"
+        - name: EXTERNAL_CALL_METHOD
+          value: "GET"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservice-2
+  namespace: sample-api-python
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microservice-2
+  template:
+    metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-python: "o11y/python-auto-instrumentation"
+      labels:
+        app: microservice-2
+    spec:
+      containers:
+      - name: app
+        image: paulofponciano/demo-ms-intercomunicacao:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: TITLE
+          value: "Microservice 2"
+        - name: RESPONSE_TIME
+          value: "500"
+        - name: EXTERNAL_CALL_URL
+          value: "http://microservice-3.sample-api-python.svc.cluster.local:5000"
+        - name: EXTERNAL_CALL_METHOD
+          value: "GET"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microservice-3
+  namespace: sample-api-python
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: microservice-3
+  template:
+    metadata:
+      annotations:
+        instrumentation.opentelemetry.io/inject-python: "o11y/python-auto-instrumentation"
+      labels:
+        app: microservice-3
+    spec:
+      containers:
+      - name: app
+        image: paulofponciano/demo-ms-intercomunicacao:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: TITLE
+          value: "Microservice 3"
+        - name: RESPONSE_TIME
+          value: "500"
+        - name: EXTERNAL_CALL_URL
+          value: ""
+        - name: EXTERNAL_CALL_METHOD
+          value: "GET"

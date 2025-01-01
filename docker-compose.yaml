@@ -1,0 +1,49 @@
+version: '3.9'
+
+networks:
+  microservices_network:
+    driver: bridge
+
+services:
+  microservice-1:
+    image: paulofponciano/demo-ms-intercomunicacao:latest
+    container_name: microservice-1
+    ports:
+      - "5001:5000"
+    environment:
+      TITLE: "Microservice 1"
+      RESPONSE_TIME: "500"
+      EXTERNAL_CALL_URL: "http://microservice-2:5000"
+      EXTERNAL_CALL_METHOD: "GET"
+    depends_on:
+      - microservice-2
+    networks:
+      - microservices_network
+
+  microservice-2:
+    image: paulofponciano/demo-ms-intercomunicacao:latest
+    container_name: microservice-2
+    ports:
+      - "5002:5000"
+    environment:
+      TITLE: "Microservice 2"
+      RESPONSE_TIME: "500"
+      EXTERNAL_CALL_URL: "http://microservice-3:5000"
+      EXTERNAL_CALL_METHOD: "GET"
+    depends_on:
+      - microservice-3
+    networks:
+      - microservices_network
+
+  microservice-3:
+    image: paulofponciano/demo-ms-intercomunicacao:latest
+    container_name: microservice-3
+    ports:
+      - "5003:5000"
+    environment:
+      TITLE: "Microservice 3"
+      RESPONSE_TIME: "500"
+      EXTERNAL_CALL_URL: ""
+      EXTERNAL_CALL_METHOD: "GET"
+    networks:
+      - microservices_network
