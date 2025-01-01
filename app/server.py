@@ -1,5 +1,3 @@
-import time
-import requests
 from flask import Flask, request, render_template
 from config import Config
 
@@ -9,6 +7,9 @@ def create_server():
 
     @app.route("/")
     def index():
+        import time
+        import requests
+
         time.sleep(config.RESPONSE_TIME / 1000)
 
         content = "Default Content"
