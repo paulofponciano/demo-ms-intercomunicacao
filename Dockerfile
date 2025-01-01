@@ -1,9 +1,17 @@
-FROM golang:latest as builder
+FROM python:3.9-slim
+
 WORKDIR /app
-COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build --ldflags="-w -s" -o ms cmd/microservice/main.go
+COPY app/ /app/
 
-FROM alpine:latest
-COPY --from=builder /app/ms /app/ms
-CMD ["/app/ms"]
+RUN pip install --no-cache-dir -r requirements.txt
+
+ENV TITLE="Default Title" \
+    RESPONSE_TIME=0 \
+    EXTERNAL_CALL_URL="" \
+    EXTERNAL_CALL_METHOD="GET" \
+    HTTP_PORT=5000
+
+EXPOSE 5000
+
+CMD ["python", "main.py"]
