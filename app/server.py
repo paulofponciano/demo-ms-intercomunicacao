@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template
 from config import Config
+import os
 
 def create_server():
     app = Flask(__name__, template_folder="templates")
@@ -26,6 +27,13 @@ def create_server():
             except requests.RequestException as e:
                 return f"Error calling external service: {e}", 500
 
-        return render_template("index.html", title=config.TITLE, content=content)
+        pod_name = os.getenv("HOSTNAME", "unknown-pod")
+
+        return render_template(
+            "index.html",
+            title=config.TITLE,
+            content=content,
+            pod_name=pod_name
+        )
 
     return app

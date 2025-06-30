@@ -33,11 +33,17 @@
             font-size: 1rem;
             margin: 0;
         }
+        .pod-name {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="box">
         <h1>{{ title }}</h1>
+        <div class="pod-name"><strong>Pod:</strong> {{ pod_name }}</div>
         <div>{{ content|safe }}</div>
     </div>
 </body>
