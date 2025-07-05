@@ -1,6 +1,11 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, Response
 from config import Config
 import os
+from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
+
+
+REQUEST_COUNT = Counter('app_requests_total', 'Total req', ['method', 'endpoint'])
+REQUEST_LATENCY = Histogram('app_request_latency_seconds', 'Req latency', ['endpoint'])
 
 def create_server():
     app = Flask(__name__, template_folder="templates")
@@ -10,6 +15,9 @@ def create_server():
     def index():
         import time
         import requests
+
+        start_time = time.time()
+        REQUEST_COUNT.labels(method=request.method, endpoint='/').inc()
 
         time.sleep(config.RESPONSE_TIME / 1000)
 
@@ -29,11 +37,17 @@ def create_server():
 
         pod_name = os.getenv("HOSTNAME", "unknown-pod")
 
+        REQUEST_LATENCY.labels(endpoint='/').observe(time.time() - start_time)
+
         return render_template(
             "index.html",
             title=config.TITLE,
             content=content,
             pod_name=pod_name
         )
+
+    @app.route("/metrics")
+    def metrics():
+        return Response(generate_latest(), mimetype=CONTENT_TYPE_LATEST)
 
     return app
