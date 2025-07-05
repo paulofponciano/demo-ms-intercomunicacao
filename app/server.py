@@ -3,13 +3,33 @@ from config import Config
 import os
 from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
 
-
 REQUEST_COUNT = Counter('app_requests_total', 'Total req', ['method', 'endpoint'])
 REQUEST_LATENCY = Histogram('app_request_latency_seconds', 'Req latency', ['endpoint'])
 
 def create_server():
     app = Flask(__name__, template_folder="templates")
     config = Config()
+
+    @app.route("/healthz")
+    def healthz():
+        return "OK", 200
+
+    @app.route("/ready")
+    def ready():
+        if config.EXTERNAL_CALL_URL:
+            import requests
+            try:
+                if config.EXTERNAL_CALL_METHOD.upper() == "GET":
+                    r = requests.get(config.EXTERNAL_CALL_URL, timeout=2)
+                elif config.EXTERNAL_CALL_METHOD.upper() == "POST":
+                    r = requests.post(config.EXTERNAL_CALL_URL, timeout=2)
+                else:
+                    return "Invalid ExternalCallMethod", 500
+                if r.status_code != 200:
+                    return "Dependency not ready", 503
+            except Exception:
+                return "Dependency not ready", 503
+        return "READY", 200
 
     @app.route("/")
     def index():
