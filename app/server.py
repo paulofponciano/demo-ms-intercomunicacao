@@ -66,6 +66,10 @@ def create_server():
             pod_name=pod_name
         )
 
+    @app.route("/version")
+    def version():
+      return {"version": config.APP_VERSION}, 200
+
     @app.route("/metrics")
     def metrics():
         return Response(generate_latest(), mimetype=CONTENT_TYPE_LATEST)
