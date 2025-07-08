@@ -29,6 +29,8 @@ spec:
           value: "http://microservice-2.sample-api-python.svc.cluster.local:5000"
         - name: EXTERNAL_CALL_METHOD
           value: "GET"
+        - name: APP_VERSION
+          value: "0.1.0"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -61,6 +63,8 @@ spec:
           value: "http://microservice-3.sample-api-python.svc.cluster.local:5000"
         - name: EXTERNAL_CALL_METHOD
           value: "GET"
+        - name: APP_VERSION
+          value: "0.1.0"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -93,3 +97,5 @@ spec:
           value: ""
         - name: EXTERNAL_CALL_METHOD
           value: "GET"
+        - name: APP_VERSION
+          value: "0.1.0"

@@ -13,6 +13,7 @@ services:
       RESPONSE_TIME: "500"
       EXTERNAL_CALL_URL: "http://microservice-2:5000"
       EXTERNAL_CALL_METHOD: "GET"
+      APP_VERSION: "0.1.0"
     depends_on:
       - microservice-2
     networks:
@@ -28,6 +29,7 @@ services:
       RESPONSE_TIME: "2500" # bottleneck
       EXTERNAL_CALL_URL: "http://microservice-3:5000"
       EXTERNAL_CALL_METHOD: "GET"
+      APP_VERSION: "0.1.0"
     depends_on:
       - microservice-3
     networks:
@@ -43,5 +45,6 @@ services:
       RESPONSE_TIME: "500"
       EXTERNAL_CALL_URL: ""
       EXTERNAL_CALL_METHOD: "GET"
+      APP_VERSION: "0.1.0"
     networks:
       - microservices_network

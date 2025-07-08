@@ -1,3 +1,5 @@
+import os
+
 class Config:
     TITLE = os.getenv("TITLE", "Default Title")
     RESPONSE_TIME = int(os.getenv("RESPONSE_TIME", 0))
