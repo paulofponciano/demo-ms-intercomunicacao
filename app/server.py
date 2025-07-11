@@ -16,19 +16,6 @@ def create_server():
 
     @app.route("/ready")
     def ready():
-        if config.EXTERNAL_CALL_URL:
-            import requests
-            try:
-                if config.EXTERNAL_CALL_METHOD.upper() == "GET":
-                    r = requests.get(config.EXTERNAL_CALL_URL, timeout=2)
-                elif config.EXTERNAL_CALL_METHOD.upper() == "POST":
-                    r = requests.post(config.EXTERNAL_CALL_URL, timeout=2)
-                else:
-                    return "Invalid ExternalCallMethod", 500
-                if r.status_code != 200:
-                    return "Dependency not ready", 503
-            except Exception:
-                return "Dependency not ready", 503
         return "READY", 200
 
     @app.route("/")
@@ -63,12 +50,13 @@ def create_server():
             "index.html",
             title=config.TITLE,
             content=content,
-            pod_name=pod_name
+            pod_name=pod_name,
+            app_version=config.APP_VERSION
         )
 
     @app.route("/version")
     def version():
-      return {"version": config.APP_VERSION}, 200
+        return {"version": config.APP_VERSION}, 200
 
     @app.route("/metrics")
     def metrics():
